@@ -10,6 +10,9 @@ import { SignUp } from './pages/SignUp';
 import { Dashboard } from './pages/Dashboard';
 import { OnboardingList } from './pages/OnboardingList';
 import { Onboarding } from './pages/Onboarding';
+import { ApprovalQueue } from './pages/ApprovalQueue';
+import { Documents } from './pages/Documents';
+import { Analytics } from './pages/Analytics';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,6 +61,39 @@ function App() {
                   <PrivateRoute allowedRoles={['admin', 'manager']}>
                     <Layout>
                       <Onboarding />
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+              
+              <Route
+                path="/approvals"
+                element={
+                  <PrivateRoute allowedRoles={['admin', 'manager']}>
+                    <Layout>
+                      <ApprovalQueue />
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+              
+              <Route
+                path="/documents"
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Documents />
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+              
+              <Route
+                path="/analytics"
+                element={
+                  <PrivateRoute allowedRoles={['admin', 'manager']}>
+                    <Layout>
+                      <Analytics />
                     </Layout>
                   </PrivateRoute>
                 }

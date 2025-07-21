@@ -15,6 +15,7 @@ import {
   Menu,
   X,
   Briefcase,
+  CheckSquare,
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -32,9 +33,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Home, roles: ['admin', 'manager', 'employee'] },
     { name: 'Onboarding', href: '/onboarding', icon: Briefcase, roles: ['admin', 'manager'] },
-    { name: 'Users', href: '/users', icon: Users, roles: ['admin'] },
+    { name: 'Approvals', href: '/approvals', icon: CheckSquare, roles: ['admin', 'manager'] },
     { name: 'Documents', href: '/documents', icon: FileText, roles: ['admin', 'manager', 'employee'] },
     { name: 'Analytics', href: '/analytics', icon: BarChart3, roles: ['admin', 'manager'] },
+    { name: 'Users', href: '/users', icon: Users, roles: ['admin'] },
     { name: 'Settings', href: '/settings', icon: Settings, roles: ['admin', 'manager', 'employee'] },
   ];
 
