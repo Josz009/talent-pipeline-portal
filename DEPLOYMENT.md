@@ -31,7 +31,11 @@ This guide covers multiple deployment options for the Talent Pipeline Portal.
      VITE_FIREBASE_APP_ID
      ```
 
-2. **Run the Project**:
+2. **Fix Host Error (if encountered)**:
+   - If you see "Blocked request" error, the fix is already included
+   - The vite.config.ts is configured for Replit compatibility
+
+3. **Run the Project**:
    - Click "Run" button
    - Replit will install dependencies and start the server
    - Your app will be available at: `https://talent-pipeline-portal.YOUR-USERNAME.repl.co`
