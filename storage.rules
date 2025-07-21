@@ -1,0 +1,33 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check file size (10MB limit)
+    function isValidSize() {
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+    
+    // Helper function to check file type
+    function isValidFileType() {
+      return request.resource.contentType.matches('application/pdf') ||
+             request.resource.contentType.matches('application/msword') ||
+             request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.wordprocessingml.document') ||
+             request.resource.contentType.matches('image/jpeg') ||
+             request.resource.contentType.matches('image/png');
+    }
+    
+    // Documents folder
+    match /documents/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && 
+        request.auth.uid == userId &&
+        isValidSize() &&
+        isValidFileType();
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+  }
+}

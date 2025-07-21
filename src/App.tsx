@@ -13,6 +13,7 @@ import { Onboarding } from './pages/Onboarding';
 import { ApprovalQueue } from './pages/ApprovalQueue';
 import { Documents } from './pages/Documents';
 import { Analytics } from './pages/Analytics';
+import { Settings } from './pages/Settings';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -94,6 +95,17 @@ function App() {
                   <PrivateRoute allowedRoles={['admin', 'manager']}>
                     <Layout>
                       <Analytics />
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+              
+              <Route
+                path="/settings"
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Settings />
                     </Layout>
                   </PrivateRoute>
                 }

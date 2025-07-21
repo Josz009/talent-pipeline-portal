@@ -101,23 +101,16 @@ The Talent Pipeline Portal is a sophisticated onboarding automation system built
    npm install
    ```
 
-3. **Set up Firebase**
-   - Create a new Firebase project at [Firebase Console](https://console.firebase.google.com)
-   - Enable Authentication (Email/Password)
-   - Create a Firestore database
-   - Enable Storage
+3. **Firebase Configuration**
+   - The Firebase project is already configured
+   - Environment variables are set up in `.env` file
+   - No additional Firebase setup needed
 
-4. **Configure environment variables**
-   - Copy `.env.example` to `.env`
-   - Add your Firebase configuration:
-   ```env
-   VITE_FIREBASE_API_KEY=your_api_key
-   VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
-   VITE_FIREBASE_PROJECT_ID=your_project_id
-   VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   VITE_FIREBASE_APP_ID=your_app_id
-   ```
+4. **Initialize Demo Data**
+   - Run the development server: `npm run dev`
+   - Navigate to Settings page as admin
+   - Click "Initialize Demo Data" button
+   - This will create demo users and sample onboarding data
 
 5. **Run the development server**
    ```bash
