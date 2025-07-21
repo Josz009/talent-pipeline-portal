@@ -151,6 +151,14 @@ talent-pipeline-portal/
 
 ## 🚀 Deployment
 
+### Deploy to Replit (Recommended for Quick Demo)
+[![Run on Repl.it](https://replit.com/badge/github/Josz009/talent-pipeline-portal)](https://replit.com/new/github/Josz009/talent-pipeline-portal)
+
+1. Click the button above or import from GitHub
+2. Add Firebase credentials in Secrets tab
+3. Click Run to start the application
+4. Access at: `https://talent-pipeline-portal.YOUR-USERNAME.repl.co`
+
 ### Deploy to Vercel
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Josz009/talent-pipeline-portal)
 
@@ -164,6 +172,8 @@ talent-pipeline-portal/
 4. Build command: `npm run build`
 5. Publish directory: `dist`
 6. Add environment variables
+
+**📚 See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions**
 
 ## 📈 Performance
 
