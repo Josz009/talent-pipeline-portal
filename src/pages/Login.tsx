@@ -26,7 +26,7 @@ export const Login: React.FC = () => {
     try {
       setError('');
       await signIn(data.email, data.password);
-      navigate('/');
+      navigate('/dashboard');
     } catch (error: any) {
       setError(error.message || 'Failed to sign in');
     }

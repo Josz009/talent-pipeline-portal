@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { UserRole } from '../../types';
+import type { UserRole } from '../../types';
 import { Spinner } from '../ui/Spinner';
 
 interface PrivateRouteProps {
@@ -25,7 +25,7 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRol
   }
 
   if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;

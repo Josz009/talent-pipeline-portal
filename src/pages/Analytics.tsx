@@ -48,7 +48,7 @@ import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { db } from '../lib/firebase';
 import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
-import { OnboardingTask } from '../types';
+import type { OnboardingTask } from '../types';
 
 interface AnalyticsData {
   totalOnboardings: number;

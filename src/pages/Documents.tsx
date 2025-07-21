@@ -44,7 +44,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
-import { Document } from '../types';
+import type { Document } from '../types';
 
 interface DocumentWithId extends Document {
   id: string;

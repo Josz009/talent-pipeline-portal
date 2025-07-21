@@ -11,7 +11,7 @@ import {
   addDoc,
   Timestamp 
 } from 'firebase/firestore';
-import { User, UserRole } from '../types';
+import type { User, UserRole } from '../types';
 
 // Demo users data
 const demoUsers = [

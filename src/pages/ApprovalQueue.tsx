@@ -34,7 +34,7 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
-import { OnboardingTask, Approval } from '../types';
+import type { OnboardingTask, Approval } from '../types';
 
 interface ApprovalItem extends OnboardingTask {
   selected?: boolean;

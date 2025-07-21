@@ -7,7 +7,7 @@ import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { Card, CardContent, CardHeader } from '../components/ui/Card';
 import { Briefcase } from 'lucide-react';
-import { UserRole } from '../types';
+import type { UserRole } from '../types';
 
 interface SignUpForm {
   email: string;
@@ -34,7 +34,7 @@ export const SignUp: React.FC = () => {
     try {
       setError('');
       await signUp(data.email, data.password, data.displayName, data.role);
-      navigate('/');
+      navigate('/dashboard');
     } catch (error: any) {
       setError(error.message || 'Failed to create account');
     }

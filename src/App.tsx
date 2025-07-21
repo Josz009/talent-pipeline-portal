@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './contexts/AuthContext';
@@ -14,6 +14,11 @@ import { ApprovalQueue } from './pages/ApprovalQueue';
 import { Documents } from './pages/Documents';
 import { Analytics } from './pages/Analytics';
 import { Settings } from './pages/Settings';
+import { TestConnection } from './pages/TestConnection';
+import { Landing } from './pages/Landing';
+import { debugFirebaseConnection } from './lib/firebase-debug';
+import { HealthCheck } from './components/HealthCheck';
+import { initializeFirebaseData, checkDemoData } from './services/firebase-init';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,17 +30,35 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  useEffect(() => {
+    // Debug Firebase connection on app load
+    debugFirebaseConnection();
+    
+    // Initialize demo data if needed
+    const initData = async () => {
+      const exists = await checkDemoData();
+      if (!exists) {
+        console.log('Initializing demo data...');
+        await initializeFirebaseData();
+      }
+    };
+    initData().catch(console.error);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
           <Router>
+            <HealthCheck />
             <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/test" element={<TestConnection />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               
               <Route
-                path="/"
+                path="/dashboard"
                 element={
                   <PrivateRoute>
                     <Layout>
@@ -111,7 +134,7 @@ function App() {
                 }
               />
               
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </Router>
         </AuthProvider>

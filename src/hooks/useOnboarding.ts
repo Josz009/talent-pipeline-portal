@@ -12,7 +12,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { OnboardingTask, TimelineEvent } from '../types';
+import type { OnboardingTask, TimelineEvent } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 
 export const useOnboarding = () => {

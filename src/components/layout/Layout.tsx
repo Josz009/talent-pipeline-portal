@@ -31,7 +31,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const navigation = [
-    { name: 'Dashboard', href: '/', icon: Home, roles: ['admin', 'manager', 'employee'] },
+    { name: 'Dashboard', href: '/dashboard', icon: Home, roles: ['admin', 'manager', 'employee'] },
     { name: 'Onboarding', href: '/onboarding', icon: Briefcase, roles: ['admin', 'manager'] },
     { name: 'Approvals', href: '/approvals', icon: CheckSquare, roles: ['admin', 'manager'] },
     { name: 'Documents', href: '/documents', icon: FileText, roles: ['admin', 'manager', 'employee'] },
