@@ -198,7 +198,6 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-500 dark:bg-gray-500;
   }
-  }
   
   .shadow-premium {
     @apply shadow-lg shadow-gray-900/5 dark:shadow-gray-100/5;

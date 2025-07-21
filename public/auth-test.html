@@ -90,15 +90,18 @@
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         
-        // Your config
+        // Firebase config should be loaded from environment variables
+        // DO NOT hardcode API keys in client-side code!
         const firebaseConfig = {
-            apiKey: "AIzaSyDbV_Wmk52Fnv36qPJ2kElJTreLnej2D9Y",
-            authDomain: "taskmanagerapp-1c5a7.firebaseapp.com",
-            projectId: "taskmanagerapp-1c5a7",
-            storageBucket: "taskmanagerapp-1c5a7.firebasestorage.app",
-            messagingSenderId: "441686834090",
-            appId: "1:441686834090:web:fc60717249bd401dff89d3"
+            apiKey: "[REMOVED - Use environment variables]",
+            authDomain: "[YOUR-PROJECT].firebaseapp.com",
+            projectId: "[YOUR-PROJECT-ID]",
+            storageBucket: "[YOUR-PROJECT].appspot.com",
+            messagingSenderId: "[YOUR-SENDER-ID]",
+            appId: "[YOUR-APP-ID]"
         };
+        
+        alert('This test page has been disabled for security. API keys were exposed. Please use the main app instead.');
         
         // Initialize Firebase
         let app, auth;

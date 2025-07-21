@@ -177,6 +177,7 @@ export const Login: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+        </motion.div>
       </div>
     </div>
   );
