@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Demo Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        .warning { color: orange; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #log {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🚀 Talent Pipeline Portal - Setup</h1>
+        <p>This page will help you set up demo data for the application.</p>
+    </div>
+
+    <div class="card">
+        <h2>Setup Steps</h2>
+        <button id="setup-btn" onclick="setupDemoData()">Create Demo Users</button>
+        <div id="setup-status"></div>
+    </div>
+
+    <div class="card">
+        <h2>Setup Log</h2>
+        <div id="log"></div>
+    </div>
+
+    <div class="card">
+        <h2>After Setup</h2>
+        <p>Once setup is complete, you can:</p>
+        <ul>
+            <li><a href="/">Go to Main App</a></li>
+            <li><a href="/auth-test.html">Test Authentication</a></li>
+        </ul>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbV_Wmk52Fnv36qPJ2kElJTreLnej2D9Y",
+            authDomain: "taskmanagerapp-1c5a7.firebaseapp.com",
+            projectId: "taskmanagerapp-1c5a7",
+            storageBucket: "taskmanagerapp-1c5a7.firebasestorage.app",
+            messagingSenderId: "441686834090",
+            appId: "1:441686834090:web:fc60717249bd401dff89d3"
+        };
+        
+        let app, auth, db;
+        const logDiv = document.getElementById('log');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'blue';
+            logDiv.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            log('Firebase initialized successfully', 'success');
+        } catch (error) {
+            log('Firebase initialization error: ' + error.message, 'error');
+        }
+        
+        const demoUsers = [
+            {
+                email: 'admin@talentpipeline.com',
+                password: 'admin123',
+                displayName: 'Admin User',
+                role: 'admin'
+            },
+            {
+                email: 'manager@talentpipeline.com',
+                password: 'manager123',
+                displayName: 'Manager User',
+                role: 'manager'
+            },
+            {
+                email: 'employee@talentpipeline.com',
+                password: 'employee123',
+                displayName: 'Employee User',
+                role: 'employee'
+            }
+        ];
+        
+        window.setupDemoData = async function() {
+            const button = document.getElementById('setup-btn');
+            const statusDiv = document.getElementById('setup-status');
+            
+            button.disabled = true;
+            statusDiv.innerHTML = '<span class="info">Setting up demo data...</span>';
+            log('Starting setup process...');
+            
+            let successCount = 0;
+            let errorCount = 0;
+            
+            for (const userData of demoUsers) {
+                try {
+                    log(`Creating user: ${userData.email}`);
+                    
+                    // Create user
+                    const userCredential = await createUserWithEmailAndPassword(
+                        auth,
+                        userData.email,
+                        userData.password
+                    );
+                    
+                    // Update profile
+                    await updateProfile(userCredential.user, {
+                        displayName: userData.displayName
+                    });
+                    
+                    // Save to Firestore
+                    await setDoc(doc(db, 'users', userCredential.user.uid), {
+                        email: userData.email,
+                        displayName: userData.displayName,
+                        role: userData.role,
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    });
+                    
+                    log(`✅ Created user: ${userData.email}`, 'success');
+                    successCount++;
+                    
+                } catch (error) {
+                    if (error.code === 'auth/email-already-in-use') {
+                        log(`ℹ️ User ${userData.email} already exists`, 'info');
+                        successCount++;
+                    } else {
+                        log(`❌ Error creating ${userData.email}: ${error.message}`, 'error');
+                        errorCount++;
+                    }
+                }
+            }
+            
+            // Final status
+            if (errorCount === 0) {
+                statusDiv.innerHTML = '<span class="success">✅ Setup complete! All demo users are ready.</span>';
+                log('Setup completed successfully!', 'success');
+            } else {
+                statusDiv.innerHTML = `<span class="warning">⚠️ Setup completed with ${errorCount} errors. Check the log.</span>`;
+            }
+            
+            button.textContent = 'Setup Complete';
+        };
+    </script>
+</body>
+</html>

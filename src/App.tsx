@@ -31,18 +31,24 @@ const queryClient = new QueryClient({
 
 function App() {
   useEffect(() => {
-    // Debug Firebase connection on app load
-    debugFirebaseConnection();
+    console.log('App.tsx: Component mounted');
     
-    // Initialize demo data if needed
-    const initData = async () => {
-      const exists = await checkDemoData();
-      if (!exists) {
-        console.log('Initializing demo data...');
-        await initializeFirebaseData();
-      }
-    };
-    initData().catch(console.error);
+    // Debug Firebase connection on app load
+    try {
+      debugFirebaseConnection();
+    } catch (error) {
+      console.error('Firebase debug error:', error);
+    }
+    
+    // Initialize demo data if needed (disabled temporarily)
+    // const initData = async () => {
+    //   const exists = await checkDemoData();
+    //   if (!exists) {
+    //     console.log('Initializing demo data...');
+    //     await initializeFirebaseData();
+    //   }
+    // };
+    // initData().catch(console.error);
   }, []);
 
   return (

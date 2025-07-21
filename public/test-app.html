@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test App Load</title>
+</head>
+<body>
+    <h1>Testing Talent Pipeline Portal</h1>
+    <div id="status"></div>
+    <iframe id="app" src="/" width="100%" height="600" style="border: 1px solid #ccc; margin-top: 20px;"></iframe>
+    
+    <script>
+        const status = document.getElementById('status');
+        const iframe = document.getElementById('app');
+        
+        iframe.onload = () => {
+            status.innerHTML = '<p style="color: green;">✓ App frame loaded successfully</p>';
+        };
+        
+        iframe.onerror = (e) => {
+            status.innerHTML = '<p style="color: red;">✗ Error loading app: ' + e + '</p>';
+        };
+        
+        // Listen for console errors from iframe
+        window.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'error') {
+                status.innerHTML += '<p style="color: red;">Console error: ' + e.data.message + '</p>';
+            }
+        });
+    </script>
+</body>
+</html>

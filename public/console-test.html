@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Console Test</title>
+</head>
+<body>
+    <h1>Open Browser Console (F12)</h1>
+    <iframe src="/" width="100%" height="400" style="border: 1px solid #ccc;"></iframe>
+    
+    <h2>Console Output:</h2>
+    <pre id="console-output" style="background: #f0f0f0; padding: 10px; height: 300px; overflow: auto;"></pre>
+    
+    <script>
+        const output = document.getElementById('console-output');
+        let logCount = 0;
+        
+        // Capture console messages
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function addToOutput(type, ...args) {
+            const msg = `[${++logCount}] ${type}: ${args.join(' ')}`;
+            output.textContent += msg + '\n';
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToOutput('LOG', ...args);
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToOutput('ERROR', ...args);
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addToOutput('WARN', ...args);
+        };
+        
+        // Capture global errors
+        window.addEventListener('error', (e) => {
+            addToOutput('GLOBAL ERROR', e.message, 'at', e.filename, ':', e.lineno);
+        });
+        
+        // Capture unhandled promise rejections
+        window.addEventListener('unhandledrejection', (e) => {
+            addToOutput('UNHANDLED REJECTION', e.reason);
+        });
+        
+        // Listen for messages from iframe
+        window.addEventListener('message', (e) => {
+            if (e.data && typeof e.data === 'string' && e.data.includes('vite')) {
+                addToOutput('VITE', e.data);
+            }
+        });
+        
+        addToOutput('INFO', 'Console capture started. Loading app in iframe...');
+    </script>
+</body>
+</html>

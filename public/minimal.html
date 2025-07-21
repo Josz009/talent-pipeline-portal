@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minimal Test</title>
+  </head>
+  <body>
+    <h1>Testing Vite Server</h1>
+    <div id="root">Loading React app...</div>
+    <script type="module">
+      console.log('Script running...');
+      document.getElementById('root').innerHTML = '<h2>JavaScript is working!</h2>';
+      
+      // Try to import React
+      import('/src/main-test.tsx').then(() => {
+        console.log('React module loaded!');
+      }).catch(err => {
+        console.error('Error loading React:', err);
+        document.getElementById('root').innerHTML = '<h2 style="color: red;">Error: ' + err.message + '</h2>';
+      });
+    </script>
+  </body>
+</html>

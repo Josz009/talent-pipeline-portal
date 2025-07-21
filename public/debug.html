@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Page</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Talent Pipeline Portal - Debug</h1>
+    <div id="log"></div>
+
+    <script type="module">
+        const log = document.getElementById('log');
+        
+        function addLog(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(div);
+        }
+
+        // Test 1: Basic JavaScript
+        try {
+            addLog('JavaScript is working', 'success');
+        } catch (e) {
+            addLog('JavaScript error: ' + e.message, 'error');
+        }
+
+        // Test 2: Module imports
+        try {
+            addLog('Testing module imports...', 'info');
+            import('/src/main.tsx').then(() => {
+                addLog('main.tsx loaded successfully', 'success');
+            }).catch(e => {
+                addLog('Error loading main.tsx: ' + e.message, 'error');
+            });
+        } catch (e) {
+            addLog('Module import error: ' + e.message, 'error');
+        }
+
+        // Test 3: React root
+        setTimeout(() => {
+            const root = document.getElementById('root');
+            if (root) {
+                addLog('React root element found', 'success');
+            } else {
+                addLog('React root element NOT found', 'error');
+            }
+        }, 100);
+
+        // Test 4: Environment variables
+        try {
+            addLog('Checking environment...', 'info');
+            fetch('/src/lib/firebase.ts')
+                .then(res => res.text())
+                .then(text => {
+                    if (text.includes('VITE_FIREBASE_API_KEY')) {
+                        addLog('Environment variables are accessible', 'success');
+                    }
+                })
+                .catch(e => {
+                    addLog('Error checking environment: ' + e.message, 'error');
+                });
+        } catch (e) {
+            addLog('Environment check error: ' + e.message, 'error');
+        }
+
+        // Test 5: Firebase
+        setTimeout(() => {
+            import('/src/lib/firebase.ts').then(module => {
+                addLog('Firebase module loaded', 'success');
+                if (module.auth && module.db) {
+                    addLog('Firebase auth and db initialized', 'success');
+                }
+            }).catch(e => {
+                addLog('Firebase import error: ' + e.message, 'error');
+                console.error(e);
+            });
+        }, 500);
+
+        // Capture console errors
+        window.onerror = (msg, url, line, col, error) => {
+            addLog(`Global error: ${msg} at ${url}:${line}:${col}`, 'error');
+            return true;
+        };
+
+        window.addEventListener('unhandledrejection', event => {
+            addLog(`Unhandled promise rejection: ${event.reason}`, 'error');
+        });
+    </script>
+
+    <hr style="margin: 20px 0;">
+    <p>Check the browser console (F12) for additional errors</p>
+    <a href="/">Go to Main App</a>
+</body>
+</html>

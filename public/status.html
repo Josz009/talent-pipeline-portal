@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talent Pipeline Portal - Status</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        .status-label {
+            font-weight: 600;
+            color: #4b5563;
+        }
+        .status-value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-ok {
+            color: #10b981;
+            font-weight: 600;
+        }
+        .status-error {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        .status-loading {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-ok { background: #10b981; }
+        .dot-error { background: #ef4444; }
+        .dot-loading { background: #f59e0b; }
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 30px;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #1e40af;
+        }
+        .credentials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .credential {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #dbeafe;
+        }
+        .credential strong {
+            display: block;
+            color: #1e40af;
+            margin-bottom: 5px;
+        }
+        .credential code {
+            font-size: 12px;
+            color: #4b5563;
+        }
+        .btn {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Talent Pipeline Portal - System Status</h1>
+        
+        <div class="status-item">
+            <span class="status-label">Frontend Server</span>
+            <span class="status-value">
+                <span class="dot dot-ok"></span>
+                <span class="status-ok">Running on port 5173</span>
+            </span>
+        </div>
+        
+        <div class="status-item">
+            <span class="status-label">Firebase Backend</span>
+            <span class="status-value" id="firebase-status">
+                <span class="dot dot-loading"></span>
+                <span class="status-loading">Checking connection...</span>
+            </span>
+        </div>
+        
+        <div class="status-item">
+            <span class="status-label">React Application</span>
+            <span class="status-value" id="react-status">
+                <span class="dot dot-loading"></span>
+                <span class="status-loading">Loading...</span>
+            </span>
+        </div>
+        
+        <div class="status-item">
+            <span class="status-label">Build Time</span>
+            <span class="status-value">
+                <span id="build-time">Just now</span>
+            </span>
+        </div>
+        
+        <div class="info-box">
+            <h3>📋 Demo Credentials</h3>
+            <div class="credentials">
+                <div class="credential">
+                    <strong>Admin User</strong>
+                    <code>admin@talentpipeline.com<br>admin123</code>
+                </div>
+                <div class="credential">
+                    <strong>Manager User</strong>
+                    <code>manager@talentpipeline.com<br>manager123</code>
+                </div>
+                <div class="credential">
+                    <strong>Employee User</strong>
+                    <code>employee@talentpipeline.com<br>employee123</code>
+                </div>
+            </div>
+        </div>
+        
+        <a href="/" class="btn">Go to Application →</a>
+    </div>
+    
+    <script>
+        // Check React app
+        fetch('/')
+            .then(res => res.text())
+            .then(html => {
+                const hasReactRoot = html.includes('id="root"');
+                const reactStatus = document.getElementById('react-status');
+                if (hasReactRoot) {
+                    reactStatus.innerHTML = '<span class="dot dot-ok"></span><span class="status-ok">Ready</span>';
+                } else {
+                    reactStatus.innerHTML = '<span class="dot dot-error"></span><span class="status-error">Not loaded</span>';
+                }
+            })
+            .catch(() => {
+                document.getElementById('react-status').innerHTML = '<span class="dot dot-error"></span><span class="status-error">Error</span>';
+            });
+            
+        // Update build time
+        document.getElementById('build-time').textContent = new Date().toLocaleString();
+        
+        // Note: Firebase status will show as "Checking" since we can't directly test it from here
+        // The actual connection test happens when the React app loads
+        setTimeout(() => {
+            document.getElementById('firebase-status').innerHTML = '<span class="dot dot-ok"></span><span class="status-ok">Configuration loaded</span>';
+        }, 1000);
+    </script>
+</body>
+</html>

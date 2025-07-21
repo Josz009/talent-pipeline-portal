@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standalone React Test</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+    <h1>Standalone React Test (No Vite/Build Tools)</h1>
+    <div id="root"></div>
+    
+    <script>
+        // Using React without JSX or build tools
+        const e = React.createElement;
+        
+        function App() {
+            const [count, setCount] = React.useState(0);
+            const [time, setTime] = React.useState(new Date().toLocaleTimeString());
+            
+            React.useEffect(() => {
+                const timer = setInterval(() => {
+                    setTime(new Date().toLocaleTimeString());
+                }, 1000);
+                return () => clearInterval(timer);
+            }, []);
+            
+            return e('div', { style: { padding: '20px', fontFamily: 'Arial' } }, [
+                e('h2', { key: 'title', style: { color: 'green' } }, '✅ React is Working!'),
+                e('p', { key: 'time' }, 'Current time: ' + time),
+                e('p', { key: 'count' }, 'Count: ' + count),
+                e('button', { 
+                    key: 'button',
+                    onClick: () => setCount(count + 1),
+                    style: { padding: '10px 20px', fontSize: '16px' }
+                }, 'Click me!'),
+                e('hr', { key: 'hr', style: { margin: '20px 0' } }),
+                e('p', { key: 'info' }, 'This proves React works in your browser.'),
+                e('p', { key: 'issue' }, 'The issue is with the Vite build or imports.'),
+                e('a', { key: 'link', href: '/' }, 'Try main app again')
+            ]);
+        }
+        
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(e(App));
+        
+        console.log('Standalone React app loaded successfully!');
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .status {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <div class="status">
+        <h1>Talent Pipeline Portal - Connection Test</h1>
+        <p class="success">✅ Static HTML is loading correctly</p>
+        <p class="success">✅ Server is running on port 5173</p>
+        <p class="info">ℹ️ Testing React app loading...</p>
+    </div>
+
+    <div class="status">
+        <h2>Quick Links:</h2>
+        <ul>
+            <li><a href="/">Main App</a> - The actual React application</li>
+            <li><a href="/test.txt">Test File</a> - Simple text file (should show "Server is working!")</li>
+            <li><a href="/console-test.html">Console Test</a> - Shows console output</li>
+        </ul>
+    </div>
+
+    <div class="status">
+        <h2>What's Working:</h2>
+        <ul>
+            <li class="success">✅ Vite development server is running</li>
+            <li class="success">✅ Static files are being served</li>
+            <li class="success">✅ Server responds to HTTP requests</li>
+        </ul>
+    </div>
+
+    <div class="status">
+        <h2>Troubleshooting:</h2>
+        <p>If the main app shows a white screen:</p>
+        <ol>
+            <li>Open browser console (F12)</li>
+            <li>Look for any red error messages</li>
+            <li>Try refreshing with Ctrl+Shift+R (hard refresh)</li>
+            <li>Check if any browser extensions are blocking scripts</li>
+        </ol>
+    </div>
+
+    <script>
+        // Simple test to ensure JavaScript works
+        console.log('working.html: JavaScript is running');
+        
+        // Add timestamp
+        const timestamp = document.createElement('p');
+        timestamp.className = 'info';
+        timestamp.textContent = 'Page loaded at: ' + new Date().toLocaleString();
+        document.querySelector('.status').appendChild(timestamp);
+    </script>
+</body>
+</html>

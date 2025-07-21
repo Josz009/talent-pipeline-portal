@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Test</title>
+</head>
+<body>
+    <div id="root">Initial content - React will replace this</div>
+    
+    <script type="module">
+        console.log('=== React Test Starting ===');
+        
+        // Test 1: Check if page loads
+        console.log('✓ Page loaded');
+        
+        // Test 2: Check root element
+        const root = document.getElementById('root');
+        if (root) {
+            console.log('✓ Root element found');
+        } else {
+            console.error('✗ Root element not found');
+        }
+        
+        // Test 3: Load React
+        try {
+            console.log('Loading React modules...');
+            
+            const { default: React } = await import('/node_modules/.vite/deps/react.js?v=3f7091fc');
+            const { createRoot } = await import('/node_modules/.vite/deps/react-dom_client.js?v=3f7091fc');
+            
+            console.log('✓ React modules loaded');
+            
+            // Test 4: Create simple component
+            const TestComponent = () => {
+                return React.createElement('div', { 
+                    style: { padding: '20px', background: '#f0f0f0', borderRadius: '10px' }
+                }, [
+                    React.createElement('h1', { key: 'h1', style: { color: 'green' } }, '✓ React is Working!'),
+                    React.createElement('p', { key: 'p1' }, 'If you see this, React loaded successfully.'),
+                    React.createElement('p', { key: 'p2' }, 'Time: ' + new Date().toLocaleTimeString())
+                ]);
+            };
+            
+            // Test 5: Render component
+            console.log('Creating React root...');
+            const reactRoot = createRoot(root);
+            
+            console.log('Rendering component...');
+            reactRoot.render(React.createElement(TestComponent));
+            
+            console.log('✓ React component rendered successfully!');
+            
+        } catch (error) {
+            console.error('✗ Error:', error);
+            document.getElementById('root').innerHTML = `
+                <div style="color: red; padding: 20px;">
+                    <h1>Error Loading React</h1>
+                    <p>${error.message}</p>
+                    <pre>${error.stack}</pre>
+                </div>
+            `;
+        }
+        
+        console.log('=== React Test Complete ===');
+    </script>
+</body>
+</html>
