@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Your Demo Users</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Create Your Specific Demo Users</h1>
+    <button onclick="createUsers()">Create Users with Your Credentials</button>
+    <div id="status"></div>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpGKsy_SFIT9df9uJb5xwkgI0PI3V0Wx8",
+            authDomain: "pipeline-job-e2952.firebaseapp.com",
+            projectId: "pipeline-job-e2952",
+            storageBucket: "pipeline-job-e2952.firebasestorage.app",
+            messagingSenderId: "878397543316",
+            appId: "1:878397543316:web:ee374107c099c777d53581"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        window.createUsers = async function() {
+            const status = document.getElementById('status');
+            status.innerHTML = '<p class="info">Creating your demo users...</p>';
+            
+            const users = [
+                {
+                    email: 'admin@talentpipeline.com',
+                    password: 'admin123',
+                    displayName: 'Admin User',
+                    role: 'admin',
+                    department: 'Management'
+                },
+                {
+                    email: 'manager@talentpipeline.com',
+                    password: 'manager123',
+                    displayName: 'Manager User',
+                    role: 'manager',
+                    department: 'Human Resources'
+                },
+                {
+                    email: 'employee@talentpipeline.com',
+                    password: 'employee123',
+                    displayName: 'Employee User',
+                    role: 'employee',
+                    department: 'Engineering'
+                }
+            ];
+            
+            for (const user of users) {
+                try {
+                    // Create user
+                    const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password);
+                    await updateProfile(userCredential.user, { displayName: user.displayName });
+                    
+                    // Create Firestore document
+                    await setDoc(doc(db, 'users', userCredential.user.uid), {
+                        email: user.email,
+                        displayName: user.displayName,
+                        role: user.role,
+                        department: user.department,
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    });
+                    
+                    status.innerHTML += '<p class="success">✅ Created ' + user.email + '</p>';
+                } catch (error) {
+                    if (error.code === 'auth/email-already-in-use') {
+                        status.innerHTML += '<p class="info">ℹ️ ' + user.email + ' already exists</p>';
+                    } else if (error.code === 'auth/weak-password') {
+                        status.innerHTML += '<p class="error">❌ ' + user.email + ' - Password too weak (Firebase requires 6+ characters)</p>';
+                    } else if (error.code === 'auth/operation-not-allowed') {
+                        status.innerHTML += '<p class="error">❌ Email/Password auth is disabled! Enable it in Firebase Console first.</p>';
+                        return;
+                    } else {
+                        status.innerHTML += '<p class="error">❌ Error with ' + user.email + ': ' + error.message + '</p>';
+                    }
+                }
+            }
+            
+            status.innerHTML += '<hr><h2>Your Users Are Ready!</h2>';
+            status.innerHTML += '<h3>Login Credentials:</h3>';
+            status.innerHTML += '<ul style="font-size: 18px;">';
+            status.innerHTML += '<li><strong>Admin:</strong> admin@talentpipeline.com / admin123</li>';
+            status.innerHTML += '<li><strong>Manager:</strong> manager@talentpipeline.com / manager123</li>';
+            status.innerHTML += '<li><strong>Employee:</strong> employee@talentpipeline.com / employee123</li>';
+            status.innerHTML += '</ul>';
+            status.innerHTML += '<p><a href="http://localhost:5173/login" style="font-size: 20px;">Go to Login Page</a></p>';
+        }
+    </script>
+</body>
+</html>

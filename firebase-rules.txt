@@ -1,0 +1,36 @@
+// Copy these rules to your Firebase Console
+// Go to: https://console.firebase.google.com/project/pipeline-job-e2952/firestore/rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to read their own user document
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow authenticated users to read all users (for demo)
+    match /users/{document=**} {
+      allow read: if request.auth != null;
+    }
+    
+    // Allow authenticated users to access onboardings
+    match /onboardings/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // Allow authenticated users to access documents
+    match /documents/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // Allow authenticated users to access other collections
+    match /{document=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+  }
+}

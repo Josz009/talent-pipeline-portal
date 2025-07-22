@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check Firebase Auth Status</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        .warning { color: orange; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Firebase Authentication Status Check</h1>
+    <div id="status">Checking...</div>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpGKsy_SFIT9df9uJb5xwkgI0PI3V0Wx8",
+            authDomain: "pipeline-job-e2952.firebaseapp.com",
+            projectId: "pipeline-job-e2952",
+            storageBucket: "pipeline-job-e2952.firebasestorage.app",
+            messagingSenderId: "878397543316",
+            appId: "1:878397543316:web:ee374107c099c777d53581"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const status = document.getElementById('status');
+        
+        status.innerHTML = '<p class="info">Firebase initialized successfully</p>';
+        
+        // Test authentication
+        async function testAuth() {
+            // Test if we can sign in with a test account
+            try {
+                await signInWithEmailAndPassword(auth, 'test@test.com', 'test123');
+                status.innerHTML += '<p class="success">✅ Email/Password auth is enabled</p>';
+            } catch (error) {
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
+                    status.innerHTML += '<p class="success">✅ Email/Password auth is enabled (test user doesn\'t exist)</p>';
+                } else if (error.code === 'auth/operation-not-allowed') {
+                    status.innerHTML += '<p class="error">❌ Email/Password authentication is NOT enabled!</p>';
+                    status.innerHTML += '<p class="warning">⚠️ You need to enable it in Firebase Console:</p>';
+                    status.innerHTML += '<p>1. Go to <a href="https://console.firebase.google.com/project/pipeline-job-e2952/authentication/providers" target="_blank">Firebase Console - Authentication</a></p>';
+                    status.innerHTML += '<p>2. Click on "Email/Password"</p>';
+                    status.innerHTML += '<p>3. Enable it and Save</p>';
+                } else {
+                    status.innerHTML += '<p class="info">Auth test error: ' + error.code + ' - ' + error.message + '</p>';
+                }
+            }
+            
+            // Try to create a test user to verify permissions
+            status.innerHTML += '<h3>Testing user creation...</h3>';
+            try {
+                const testEmail = 'test-' + Date.now() + '@example.com';
+                await createUserWithEmailAndPassword(auth, testEmail, 'TestPass123!');
+                status.innerHTML += '<p class="success">✅ Can create users successfully</p>';
+                status.innerHTML += '<p class="info">Created test user: ' + testEmail + '</p>';
+            } catch (error) {
+                if (error.code === 'auth/operation-not-allowed') {
+                    status.innerHTML += '<p class="error">❌ Email/Password authentication is DISABLED!</p>';
+                    status.innerHTML += '<h2 class="error">ACTION REQUIRED:</h2>';
+                    status.innerHTML += '<ol>';
+                    status.innerHTML += '<li>Go to <a href="https://console.firebase.google.com/project/pipeline-job-e2952/authentication/providers" target="_blank">Firebase Console</a></li>';
+                    status.innerHTML += '<li>Click "Email/Password" provider</li>';
+                    status.innerHTML += '<li>Toggle "Enable" switch</li>';
+                    status.innerHTML += '<li>Click "Save"</li>';
+                    status.innerHTML += '<li>Come back here and refresh this page</li>';
+                    status.innerHTML += '</ol>';
+                } else {
+                    status.innerHTML += '<p class="warning">User creation error: ' + error.message + '</p>';
+                }
+            }
+            
+            status.innerHTML += '<hr>';
+            status.innerHTML += '<p><a href="/setup-users.html">Go to Create Demo Users</a> (after enabling auth)</p>';
+        }
+        
+        testAuth();
+    </script>
+</body>
+</html>

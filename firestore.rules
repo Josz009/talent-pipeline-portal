@@ -1,19 +1,20 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check if user is authenticated
+    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
     
-    // Helper function to check user role
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
     function hasRole(role) {
       return isAuthenticated() && 
-        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role;
     }
     
-    // Helper function to check if user is admin or manager
     function isAdminOrManager() {
       return hasRole('admin') || hasRole('manager');
     }
@@ -21,33 +22,32 @@ service cloud.firestore {
     // Users collection
     match /users/{userId} {
       allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && 
-        (request.auth.uid == userId || hasRole('admin'));
+      allow write: if isOwner(userId) || hasRole('admin');
     }
     
     // Onboardings collection
-    match /onboardings/{documentId} {
+    match /onboardings/{document=**} {
       allow read: if isAuthenticated();
       allow create: if isAdminOrManager();
-      allow update: if isAdminOrManager() || 
-        (isAuthenticated() && resource.data.employeeEmail == request.auth.token.email);
+      allow update: if isAdminOrManager();
       allow delete: if hasRole('admin');
     }
     
     // Documents collection
-    match /documents/{documentId} {
+    match /documents/{document=**} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAdminOrManager() || 
-        (isAuthenticated() && resource.data.uploadedBy == request.auth.uid);
-      allow delete: if hasRole('admin') || 
-        (isAuthenticated() && resource.data.uploadedBy == request.auth.uid);
+      allow write: if isAuthenticated();
     }
     
-    // Approvals collection (if separate)
-    match /approvals/{documentId} {
+    // Analytics data (read-only for most users)
+    match /analytics/{document=**} {
       allow read: if isAuthenticated();
-      allow write: if isAdminOrManager();
+      allow write: if hasRole('admin');
+    }
+    
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

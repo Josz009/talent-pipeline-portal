@@ -13,12 +13,9 @@ export const Landing: React.FC = () => {
 
   return (
     <div className="min-h-screen overflow-hidden">
-      {/* Animated Background */}
+      {/* Simple Background */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-purple-950" />
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob dark:bg-purple-600 dark:opacity-30" />
-        <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 dark:bg-yellow-600 dark:opacity-30" />
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000 dark:bg-pink-600 dark:opacity-30" />
       </div>
 
       {/* Hero Section */}
@@ -29,18 +26,12 @@ export const Landing: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          {/* Animated Icon */}
+          {/* Icon */}
           <motion.div 
             className="flex justify-center mb-8"
-            animate={{ 
-              scale: [1, 1.1, 1],
-              rotate: [0, 5, -5, 0]
-            }}
-            transition={{ 
-              duration: 4,
-              repeat: Infinity,
-              repeatType: "reverse"
-            }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
           >
             <div className="relative">
               <div className="h-24 w-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl">
@@ -137,31 +128,37 @@ export const Landing: React.FC = () => {
               icon={Users}
               title="Smart Onboarding"
               description="Automated workflows guide new employees through the entire onboarding process"
+              gradient="from-blue-500 to-purple-600"
             />
             <FeatureCard
               icon={FileText}
               title="Document Management"
               description="Secure storage and intelligent processing of employee documents"
+              gradient="from-green-500 to-teal-600"
             />
             <FeatureCard
               icon={CheckCircle}
               title="Approval Workflows"
               description="Multi-level approval chains with real-time notifications"
+              gradient="from-purple-500 to-pink-600"
             />
             <FeatureCard
               icon={BarChart}
               title="Analytics Dashboard"
               description="Real-time insights into HR metrics and process efficiency"
+              gradient="from-orange-500 to-red-600"
             />
             <FeatureCard
               icon={Shield}
               title="Enterprise Security"
               description="Bank-level encryption and role-based access control"
+              gradient="from-indigo-500 to-blue-600"
             />
             <FeatureCard
               icon={Briefcase}
               title="70% Time Savings"
               description="Proven automation that reduces manual HR tasks significantly"
+              gradient="from-cyan-500 to-blue-600"
             />
           </div>
         </div>
